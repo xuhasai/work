@@ -11,7 +11,7 @@
  Target Server Version : 80030 (8.0.30)
  File Encoding         : 65001
 
- Date: 30/06/2024 13:01:38
+ Date: 30/06/2024 14:56:32
 */
 
 SET NAMES utf8mb4;
@@ -26,13 +26,14 @@ CREATE TABLE `administratoruser`  (
   `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `permissions` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of administratoruser
 -- ----------------------------
-INSERT INTO `administratoruser` VALUES ('1', 'user', '10400d-12650n-6615-8850±-5559m', 'hasai');
+INSERT INTO `administratoruser` VALUES ('1', 'user', '10400d-12650n-6615-8850±-5559m', 'hasai', 'admin');
 
 -- ----------------------------
 -- Table structure for company
@@ -65,28 +66,31 @@ CREATE TABLE `jobseekers`  (
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `gender` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `age` int NULL DEFAULT NULL,
+  `permissions` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of jobseekers
 -- ----------------------------
-INSERT INTO `jobseekers` VALUES ('1', 'user', '123456', NULL, NULL, NULL);
+INSERT INTO `jobseekers` VALUES ('1', 'user', '10400d-12650n-6615-8850±-5559m', NULL, NULL, NULL, 'jobseekers');
 
 -- ----------------------------
 -- Table structure for recruitmentuser
 -- ----------------------------
 DROP TABLE IF EXISTS `recruitmentuser`;
 CREATE TABLE `recruitmentuser`  (
-  `id` varbinary(32) NOT NULL,
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `permissions` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of recruitmentuser
 -- ----------------------------
+INSERT INTO `recruitmentuser` VALUES ('1', 'user', '10400d-12650n-6615-8850±-5559m', 'sss', 'recruitmentuser');
 
 SET FOREIGN_KEY_CHECKS = 1;
