@@ -1,0 +1,18 @@
+spring:
+  #  web:
+  #    resources:
+  #      static-locations: file:/E:/徐哥视频
+  #  配置数据源
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/work
+    username: root
+    password: root
+  #  配置Redis
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+#  配置mybatis的xml文件位置
+mybatis:
+  config-location: classpath:mybatis.xml
