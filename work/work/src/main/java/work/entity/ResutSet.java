@@ -1,5 +1,6 @@
-package hasai.entity;
+package work.entity;
 import lombok.Data;
+
 @Data
 public class ResutSet<T> {
     private String status;

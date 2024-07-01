@@ -1,6 +1,6 @@
-package hasai.mapper;
+package work.mapper;
 
-import hasai.entity.JobSeekersUser;
+import work.entity.JobSeekersUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

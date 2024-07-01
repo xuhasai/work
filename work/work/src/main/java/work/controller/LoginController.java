@@ -1,11 +1,10 @@
-package hasai.controller;
+package work.controller;
 
-import hasai.entity.AdministratorUser;
-import hasai.entity.ResutSet;
-import hasai.mapper.AdministratorUserMapper;
-import hasai.util.DecryptPassword;
+import work.entity.AdministratorUser;
+import work.entity.ResutSet;
+import work.mapper.AdministratorUserMapper;
+import work.util.DecryptPassword;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -53,21 +52,16 @@ public class LoginController {
                     }
                 }
             }else{
-
+                return null;
             }
         }else if("jobseekers".equals(loginType)){
-
+            return null;
         } else if ("recruitment".equals(loginType)) {
-
+            return null;
         }else {
-
+            return null;
         }
         return null;
-
-
-
-
-
         /*SecurityContext context = SecurityContextHolder.getContext();  //获取SecurityContext对象（当前会话肯定是没有登陆的）
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("Test", null,
                 AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_admin"));  //手动创建一个UsernamePasswordAuthenticationToken对象，也就是用户的认证信息，角色需要添加ROLE_前缀，权限直接写

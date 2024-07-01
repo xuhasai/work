@@ -1,4 +1,4 @@
-package hasai.util;
+package work.util;
 
 public class DecryptPassword {
     public static String decryptPassword(String password){

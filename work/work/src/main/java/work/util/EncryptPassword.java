@@ -1,4 +1,4 @@
-package hasai.util;
+package work.util;
 
 import java.util.ArrayList;
 import java.util.List;

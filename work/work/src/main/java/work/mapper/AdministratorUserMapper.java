@@ -1,6 +1,6 @@
-package hasai.mapper;
+package work.mapper;
 
-import hasai.entity.AdministratorUser;
+import work.entity.AdministratorUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

@@ -1,4 +1,4 @@
-package hasai.entity;
+package work.entity;
 
 import lombok.Data;
 
