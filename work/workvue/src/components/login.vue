@@ -19,7 +19,7 @@
     let loginType = ref("");
 
     function login(){
-        axios.post("/api/login",{
+        axios.post("/api/perform_login",{
             username:username.value,
             password:password.value,
             loginType:loginType.value

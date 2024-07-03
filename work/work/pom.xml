@@ -8,10 +8,10 @@
         <version>2.6.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ceshi</groupId>
-    <artifactId>ceshi</artifactId>
+    <groupId>work</groupId>
+    <artifactId>work</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ceshiceshi</name>
+    <name>work</name>
     <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>
@@ -85,8 +85,12 @@
             <version>1.2.83</version>
         </dependency>
 
-
-
+        <!--引入JWT-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.3.0</version>
+        </dependency>
 
 
 
