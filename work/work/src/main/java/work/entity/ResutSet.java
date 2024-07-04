@@ -6,4 +6,5 @@ public class ResutSet<T> {
     private String status;
     private String message;
     private T data;
+    private String token;
 }

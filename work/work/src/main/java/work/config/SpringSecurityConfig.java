@@ -1,14 +1,9 @@
 package work.config;
 
-import com.alibaba.fastjson.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import work.entity.AdministratorUser;
 import work.entity.ResutSet;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +12,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
-import work.service.UserDetailsServiceFactory;
+import work.filter.JwtAuthenticationFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -26,14 +22,8 @@ import java.io.IOException;
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsServiceFactory userDetailsServiceFactory;
-
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(loginType -> userDetailsServiceFactory.getUserDetailsService(loginType).loadUserByUsername(loginType))
-                .passwordEncoder(new BCryptPasswordEncoder());
-    }*/
+    @Resource
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
 
     @Bean
@@ -42,32 +32,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    //处理用户登录
-    /*@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsServiceFactory.getUserDetailsService("1"))
-                .passwordEncoder(new BCryptPasswordEncoder());
-    }*/
-
-
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                //.sessionManagement()
+                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //.and()
                 .authorizeRequests()
-                .antMatchers("/perform_login").permitAll()
-                //.antMatchers("/login3").hasRole("bbb")
+                .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -80,7 +59,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 //退出登录成功
-                .logoutSuccessHandler(this::logoutSuccess);
+                .logoutSuccessHandler(this::logoutSuccess)
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     //登陆成功
@@ -95,6 +76,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     //退出登录成功
     public void logoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+
         response.setContentType("application/json;charset=utf8");
         ResutSet<AdministratorUser> resutSet = new ResutSet<AdministratorUser>();
         resutSet.setMessage("退出登录成功");

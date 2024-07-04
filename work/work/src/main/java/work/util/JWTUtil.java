@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -28,9 +29,10 @@ public class JWTUtil {
     private static final String key = "abcdefg";
     @Resource
     StringRedisTemplate stringRedisTemplate;
+
+
     //根据用户信息创建Jwt令牌
     public String createJwt(UserDetails user){
-        String uuid = UUID.randomUUID().toString();
         Algorithm algorithm = Algorithm.HMAC256(key);
         List list = new ArrayList(user.getAuthorities());
         List<String> list2 = new ArrayList<String>();
@@ -38,32 +40,16 @@ public class JWTUtil {
             list2.add(list.get(i)+"");
         }
         Date date = new Date();
-        Calendar calendar = Calendar.getInstance();
-        Date expDate = new Date(date.getTime()+30*1000);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println(simpleDateFormat.format(date));
-        System.out.println(simpleDateFormat.format(expDate));
-        String jwt = JWT.create()
-                        .withClaim("name", user.getUsername())  //配置JWT自定义信息
-                        .withClaim("authorities", list2)
-                        .withExpiresAt(expDate)  //设置过期时间
-                        .withIssuedAt(calendar.getTime())    //设置创建创建时间
-                        .sign(algorithm);   //最终签名
-        try {
-            //验证token
-            JWT.require(Algorithm.HMAC256(key)).build().verify(jwt);
-        } catch (TokenExpiredException e) {
-            System.out.println("msg"+"Token已经过期!!!");
-        } catch (SignatureVerificationException e){
-            System.out.println("msg"+ "签名错误!!!");
-        } catch (AlgorithmMismatchException e){
-            System.out.println("msg"+"加密算法不匹配!!!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("msg"+"无效token~~");
-        }
-        stringRedisTemplate.opsForValue().set(uuid,jwt,7, TimeUnit.DAYS);
-        return uuid;
+        Date expDate = new Date(date.getTime()+30*60*1000);
+        String token = JWT.create()
+                //.withClaim("password",user.getPassword())
+                .withClaim("name", user.getUsername())  //配置JWT自定义信息
+                .withClaim("authorities", list2)
+                .withExpiresAt(expDate)  //设置过期时间
+                .withIssuedAt(date)    //设置创建创建时间
+                .sign(algorithm);   //最终签名
+        stringRedisTemplate.opsForValue().set(token, token,30, TimeUnit.MINUTES);
+        return token;
     }
 
     //根据Jwt验证并解析用户信息
@@ -81,18 +67,31 @@ public class JWTUtil {
         }
     }
 
-    public void verify(String uuid,HttpServletRequest request){
-        if(uuid != null && !uuid.isEmpty()){
-            if(stringRedisTemplate.hasKey(uuid)){
-                String token = stringRedisTemplate.opsForValue().get(uuid);
-                resolveJwt(token,request);
-            }
+    //根据Jwt验证并解析用户信息
+    public boolean verify(String token,HttpServletRequest request){
+        try {
+            //验证token
+            JWT.require(Algorithm.HMAC256(key)).build().verify(token);
+            return true;
+        } catch (TokenExpiredException e) {
+            System.out.println("msg"+"Token已经过期!!!");
+            return false;
+        } catch (SignatureVerificationException e){
+            System.out.println("msg"+ "签名错误!!!");
+            return false;
+        } catch (AlgorithmMismatchException e){
+            System.out.println("msg"+"加密算法不匹配!!!");
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("msg"+"无效token~~");
+            return false;
         }
     }
 
-    public boolean signOut(String uuid){
-        if(stringRedisTemplate.hasKey(uuid)){
-            return stringRedisTemplate.delete(uuid);
+    public boolean signOut(String token){
+        if(stringRedisTemplate.hasKey(token)){
+            return stringRedisTemplate.delete(token);
         }else {
             return false;
         }
