@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import work.service.RecruitmentUserLoginService;
 import work.service.UserLoginServiceFactory;
 import work.util.JWTUtil;
 
@@ -49,6 +50,9 @@ public class LoginController {
 
     @Autowired
     JobSeekersUserLoginService jobLoginService;
+
+    @Autowired
+    RecruitmentUserLoginService recruitmentLoginService;
 
     @Resource
     JWTUtil jwtUtil;
@@ -109,7 +113,7 @@ public class LoginController {
                 userDetails = jobLoginService.loadUserByUsername(username,password);
                 resutSet.setData(jobSeekersUserLoginMapper.getUserByName(username));
             }else if("recruitment".equals(loginType)){
-
+                userDetails = recruitmentLoginService.loadUserByUsername(username,password);
             }else {
                 resutSet.setMessage("用户名密码错误");
                 resutSet.setStatus(HttpStatus.UNAUTHORIZED+"");

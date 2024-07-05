@@ -1,6 +1,8 @@
 package work.config;
 
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -76,7 +78,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     //退出登录成功
     public void logoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication2 = context.getAuthentication();
         response.setContentType("application/json;charset=utf8");
         ResutSet<AdministratorUser> resutSet = new ResutSet<AdministratorUser>();
         resutSet.setMessage("退出登录成功");

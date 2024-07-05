@@ -31,6 +31,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication2 = context.getAuthentication();
         /*String requestURI = request.getRequestURI();
         String requestURL = request.getRequestURL().toString();
         String contextPath = request.getContextPath();
@@ -44,8 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if("/login".equals(servletPath) || "/logout".equals(servletPath)) {
             filterChain.doFilter(request, response);
         }else {
-            SecurityContext context = SecurityContextHolder.getContext();
-            Authentication authentication2 = context.getAuthentication();
+
             //首先从Header中取出JWT
             String authorization = request.getHeader("Authorization");
             if(authorization != null && !authorization.isEmpty() && authorization.length()>0){
