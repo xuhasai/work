@@ -1,17 +1,23 @@
 <template>
     <div class="login">
         <div class="position">
-        <!-- <form action="/api/login" method="post"> -->
-            <label>用户名：<input type="text" name="username" v-model="username"></label><br>
-            <label>密  码：<input type="password" name="password" v-model="password"></label><br>
-            <el-radio-group v-model="loginType" text-color="#409eff" fill="#ffffff">
-                <el-radio value="admin">管理员登录</el-radio>
-                <el-radio value="jobseekers">招工者登录</el-radio>
-                <el-radio value="aaa">求职者登录</el-radio>
-            </el-radio-group>
-            <el-button @click="login" type="success" round>登录</el-button>
+            <div><label>用户名：<input type="text" name="username" v-model="username"></label></div>
+            <div><label>密&nbsp;&nbsp;&nbsp;码：<input type="password" name="password" v-model="password"></label></div>
+                <el-radio-group v-model="loginType" text-color="#409eff" fill="#ffffff">
+                    <el-radio value="admin">管理员登录</el-radio>
+                    <el-radio value="jobseekers">招工者登录</el-radio>
+                    <el-radio value="aaa">求职者登录</el-radio>
+                </el-radio-group>
+            <div id="botton">
+                <el-button @click="login" type="success" round>登录</el-button>
+                <el-button @click="registered" type="success" round>注册</el-button>
+            </div>
             
-
+            
+            
+            
+            
+            <!-- <form action="/api/login" method="post"> -->
             <!-- <label>管理员登录：<input type="radio" v-model="loginType" name="loginType" value="admin" ></label><br>
             <label>求职者登录：<input type="radio" v-model="loginType" name="loginType" value="jobseekers"></label><br>
             <label>招工者登录<input type="radio" v-model="loginType" name="loginType" value="aaa"></label><br>
@@ -28,7 +34,6 @@
     let username = ref("");
     let password = ref("");
     let loginType = ref("");
-
     function login(){
         axios.post("/api/login",{
             username:username.value,
@@ -47,6 +52,10 @@
         })
     }
 
+    function registered(){
+
+    }
+
 
 </script>
 
@@ -57,12 +66,40 @@
     align-items: center;
     width: 100%;
     height: 100%;
+    background-color: rgb(51, 133, 148);
 }
 .position{
-    width: 35%;
-    height: 35%;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows:  17% 17% 17% 17%;
+    justify-content: center;
+    align-content: center;
+    width: 30rem;
+    height: 20rem;
     background-color: aliceblue;
 }
+
+.position div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+input{
+    height: 1.8rem;
+    border: 3px solid red;
+    border-radius: 10px;
+}
+
+#botton{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows:  auto;
+    grid-column-gap: 8%;
+}
+
+
 
 /* 修改单选框文字颜色 */
 /* 
@@ -77,7 +114,7 @@
 
 /* 修改选中状态下的单选框文字颜色 */
 ::v-deep .el-radio.is-checked .el-radio__label {
-  color: rgb(243, 2, 2) !important;  /*使用 !important 提高优先级 */
+  color: rgb(72, 209, 17) !important;  /*使用 !important 提高优先级 */
 }
 
 </style>
