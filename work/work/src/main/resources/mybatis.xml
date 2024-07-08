@@ -8,8 +8,11 @@
         &lt;!&ndash; 打印查询语句 &ndash;&gt;
         <setting name="logImpl" value="STDOUT_LOGGING" />
     </settings>-->
-    <!--<typeAliases>
-        <package name="hasaivedio.entity"/>
-    </typeAliases>-->
+    <typeAliases>
+        <package name="work.entity"/>
+    </typeAliases>
+    <mappers>
+        <package name="work.mapper"/>
+    </mappers>
 
 </configuration>

@@ -10,6 +10,7 @@ const router = createRouter({
             component:Login
         },
         {
+            name:"recuritment",
             path:"/recuritment",
             component:Recuritment
         }

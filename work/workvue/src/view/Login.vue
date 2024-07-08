@@ -31,6 +31,8 @@
 <script setup lang="ts">
     import {ref} from "vue"
     import axios from "axios";
+    import {useRouter} from "vue-router"
+    let router = useRouter()
     let username = ref("");
     let password = ref("");
     let loginType = ref("");
@@ -46,7 +48,14 @@
             }
         }
     ).then(resp => {
-            console.log(resp.data)
+        let userData = resp.data
+            if(userData.status == "200"){
+                localStorage.setItem("user",JSON.stringify(userData))
+                console.log(localStorage.getItem("user"))
+                router.replace({
+                    name:"recuritment"
+                })
+            }
         },err => {
 
         })

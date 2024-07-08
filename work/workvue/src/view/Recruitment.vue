@@ -33,17 +33,17 @@
 
         <div v-if="formIsShow" class="cover">
             <div class="form">
-                <label>公司名称：<input type="text" name="" id=""></label>
-                <label>公司地址：<input type="text" name="" id=""></label>
-                <label>招聘职位：<input type="text" name="" id=""></label>
-                <label>每月薪资：<input type="text" name="" id=""></label>
+                <label>公司名称：<input v-model="company.name" type="text" name="" id=""></label>
+                <label>公司地址：<input v-model="company.address" type="text" name="" id=""></label>
+                <label>招聘职位：<input v-model="company.job" type="text" name="" id=""></label>
+                <label>每月薪资：<input v-model="company.salary" type="number" name="" id=""></label>
                 <label>公司简介：
-                    <textarea name="message" rows="30" cols="70" >
+                    <textarea v-model="company.detail" name="message" rows="10" cols="15" >
                         
                     </textarea>
                 </label>
                 <el-button @click="formIsShow = false" type="primary">取消</el-button>
-                <el-button type="primary">确定</el-button>
+                <el-button @click="addCompany" type="primary">确定</el-button>
             </div>
         </div>
     </div>
@@ -56,15 +56,39 @@
     let formIsShow = ref(true);
     let test = ref()
     let tableData = reactive({});
+    let company = reactive({"name":1,"address":2,"job":3,"salary":4,"detail":5})
     function handleSelectionChange(newSelection){
         console.log(newSelection)
     }
 
-    function edit(id){
-        console.log(id)
+    function edit(row){
+        console.log(row)
     }
 
 
+    function addCompany(){
+        console.log(company)
+        axios.post("/api/addCompany",{
+            name:company.name,
+            address:company.address,
+            job:company.job,
+            salary:company.salary,
+            detail:company.detail,
+            recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
+        },
+        {
+            headers: {
+            'Authorization': JSON.parse(localStorage.getItem("user")).token
+            }
+        }
+        
+        ).then(resp => {
+            
+        },err => {
+
+        })
+        formIsShow.value = false
+    }
 
 
     // 测试表格数据
@@ -112,18 +136,19 @@ input{
     width: 100vw;
     height: 100vh;
     background-color: rgba(78, 67, 67, 0.671);
-    z-index: 1;
+    z-index: 3;
 }
 
 .form{
     width: 45rem;
     height: 50rem;
     background-color: rgb(216, 6, 6)
+    
 }
 
 textarea {
   resize: none;
-  font-size: 10px;
+  font-size: 35px;
 }
 
 </style>
