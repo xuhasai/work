@@ -10,6 +10,7 @@ import work.entity.JobSeekersUser;
 import work.entity.ResutSet;
 import work.mapper.AdministratorUserLoginMapper;
 import work.mapper.JobSeekersUserLoginMapper;
+import work.mapper.RecruitmentUserLoginMapper;
 import work.service.AdministratorUserLoginService;
 import work.service.JobSeekersUserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class LoginController {
 
     @Autowired
     JobSeekersUserLoginMapper jobSeekersUserLoginMapper;
+
+    @Resource
+    RecruitmentUserLoginMapper recruitmentUserLoginMapper;
 
     @Autowired
     UserLoginServiceFactory userLoginServiceFactory;
@@ -114,6 +118,7 @@ public class LoginController {
                 resutSet.setData(jobSeekersUserLoginMapper.getUserByName(username));
             }else if("recruitment".equals(loginType)){
                 userDetails = recruitmentLoginService.loadUserByUsername(username,password);
+                resutSet.setData(recruitmentUserLoginMapper.getUserByName(username));
             }else {
                 resutSet.setMessage("用户名密码错误");
                 resutSet.setStatus(HttpStatus.UNAUTHORIZED+"");

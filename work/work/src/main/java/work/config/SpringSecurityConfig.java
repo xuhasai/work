@@ -1,5 +1,7 @@
 package work.config;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import work.filter.JwtAuthenticationFilter;
+import work.util.JWTUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +30,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Resource
+    JWTUtil jwtUtil;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,9 +49,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                //.sessionManagement()
-                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
@@ -81,12 +86,22 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication2 = context.getAuthentication();
         response.setContentType("application/json;charset=utf8");
-        ResutSet<AdministratorUser> resutSet = new ResutSet<AdministratorUser>();
-        resutSet.setMessage("退出登录成功");
-        resutSet.setStatus("200");
-        resutSet.setData(null);
-        response.getWriter().print(resutSet);
-        System.out.println("退出登录成功");
+        String authorization = request.getHeader("Authorization");
+        if(authorization != null && !authorization.isEmpty() && authorization.length()>0){
+            ResutSet resutSet = new ResutSet();
+            if(jwtUtil.signOut(authorization)){
+                resutSet.setMessage("退出登录成功");
+                resutSet.setStatus("200");
+                resutSet.setData(null);
+                response.getWriter().print(resutSet);
+            }else{
+                resutSet.setMessage("滚");
+                resutSet.setStatus("200");
+                response.getWriter().print(resutSet);
+            }
+        }
+
+
     }
 
 

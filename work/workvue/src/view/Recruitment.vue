@@ -52,6 +52,7 @@
 
 <script setup lang="ts">
     import {ref , reactive} from "vue"
+    import {useRouter} from "vue-router"
     import axios from 'axios';
     let formIsShow = ref(true);
     let test = ref()
@@ -89,6 +90,7 @@
         })
         formIsShow.value = false
     }
+
 
 
     // 测试表格数据

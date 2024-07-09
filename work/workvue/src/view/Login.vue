@@ -5,8 +5,8 @@
             <div><label>密&nbsp;&nbsp;&nbsp;码：<input type="password" name="password" v-model="password"></label></div>
                 <el-radio-group v-model="loginType" text-color="#409eff" fill="#ffffff">
                     <el-radio value="admin">管理员登录</el-radio>
-                    <el-radio value="jobseekers">招工者登录</el-radio>
-                    <el-radio value="aaa">求职者登录</el-radio>
+                    <el-radio value="recruitment">招工者登录</el-radio>
+                    <el-radio value="jobseekers">求职者登录</el-radio>
                 </el-radio-group>
             <div id="botton">
                 <el-button @click="login" type="success" round>登录</el-button>

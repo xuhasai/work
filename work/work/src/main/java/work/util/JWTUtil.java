@@ -3,23 +3,14 @@ package work.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.AlgorithmMismatchException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +31,7 @@ public class JWTUtil {
             list2.add(list.get(i)+"");
         }
         Date date = new Date();
-        Date expDate = new Date(date.getTime()+30*60*1000);
+        Date expDate = new Date(date.getTime()+60*60*1000);
         String token = JWT.create()
                 //.withClaim("password",user.getPassword())
                 .withClaim("name", user.getUsername())  //配置JWT自定义信息
@@ -48,31 +39,21 @@ public class JWTUtil {
                 .withExpiresAt(expDate)  //设置过期时间
                 .withIssuedAt(date)    //设置创建创建时间
                 .sign(algorithm);   //最终签名
-        stringRedisTemplate.opsForValue().set(token, token,30, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set(token, token,60, TimeUnit.MINUTES);
         return token;
-    }
-
-    //根据Jwt验证并解析用户信息
-    private static void resolveJwt(String token, HttpServletRequest request){
-        try {
-            DecodedJWT jj = JWT.decode(token);
-            Map<String, Claim> claims = jj.getClaims();  //获取令牌中内容
-            UserDetails userDetails = User.withUsername(claims.get("name").asString()).password("******").authorities(claims.get("authorities").asArray(String.class)).build();
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            //然后直接把配置好的Authentication塞给SecurityContext表示已经完成验证
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (JWTVerificationException e) {
-
-        }
     }
 
     //根据Jwt验证并解析用户信息
     public boolean verify(String token,HttpServletRequest request){
         try {
-            //验证token
-            JWT.require(Algorithm.HMAC256(key)).build().verify(token);
-            return true;
+            if(stringRedisTemplate.hasKey(token)){
+                token = stringRedisTemplate.opsForValue().get(token);
+                //验证token
+                JWT.require(Algorithm.HMAC256(key)).build().verify(token);
+                return true;
+            }else {
+                return false;
+            }
         } catch (TokenExpiredException e) {
             System.out.println("msg"+"Token已经过期!!!");
             return false;
