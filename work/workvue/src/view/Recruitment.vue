@@ -4,20 +4,23 @@
             <el-header>
                 <el-row>
                     <el-col :span="24">
-                        <el-button @click="formIsShow = true" type="primary">添加</el-button>
-                        <el-button type="primary">删除</el-button>
+                        <el-button @click="formIsShow = true,isDisabled = false,status=1" type="primary">添加</el-button>
+                        <el-button type="primary" @click="deleteCompany">删除</el-button>
                     </el-col>
                 </el-row>
             </el-header>
             <el-main>
-                <el-table @selection-change="handleSelectionChange" :data="tableData" border style="width: 100%" row-key="name">
-                    <el-table-column type="selection" />
-                    <el-table-column prop="date" label="Date" />
-                    <el-table-column prop="name" label="Name" />
-                    <el-table-column prop="address" label="Address" />
+                <el-table @selection-change="handleSelectionChange" :data="tableData" border style="width: 100%;overflow: auto;" row-key="id">
+                    <el-table-column type="selection" label="选择" />
+                    <el-table-column type="index" label="编号" />
+                    <el-table-column prop="name" label="名称" />
+                    <el-table-column prop="address" label="地址" />
+                    <el-table-column prop="job" label="职位" />
+                    <el-table-column prop="salary" label="月薪" />
+                    <el-table-column style="overflow: hidden;" prop="detail" label="简介" />
                     <el-table-column label="Operations">
                         <template #default="scope">
-                            <el-button >
+                            <el-button @click="query(scope.row)" >
                                 查看
                             </el-button>
                             <el-button @click="edit(scope.row)" >
@@ -33,17 +36,17 @@
 
         <div v-if="formIsShow" class="cover">
             <div class="form">
-                <label>公司名称：<input v-model="company.name" type="text" name="" id=""></label>
-                <label>公司地址：<input v-model="company.address" type="text" name="" id=""></label>
-                <label>招聘职位：<input v-model="company.job" type="text" name="" id=""></label>
-                <label>每月薪资：<input v-model="company.salary" type="number" name="" id=""></label>
+                <label>公司名称：<input v-model="company.name" type="text" :disabled="isDisabled"></label>
+                <label>公司地址：<input v-model="company.address" type="text" :disabled="isDisabled"></label>
+                <label>招聘职位：<input v-model="company.job" type="text" :disabled="isDisabled"></label>
+                <label>每月薪资：<input v-model="company.salary" type="number" :disabled="isDisabled"></label>
                 <label>公司简介：
-                    <textarea v-model="company.detail" name="message" rows="10" cols="15" >
+                    <textarea :disabled="isDisabled" v-model="company.detail" name="message" rows="10" cols="15" >
                         
                     </textarea>
                 </label>
                 <el-button @click="formIsShow = false" type="primary">取消</el-button>
-                <el-button @click="addCompany" type="primary">确定</el-button>
+                <el-button @click="addCompany" type="primary" :disabled="isDisabled">确定</el-button>
             </div>
         </div>
     </div>
@@ -51,71 +54,153 @@
 </template>
 
 <script setup lang="ts">
-    import {ref , reactive} from "vue"
+    import {ref , reactive , onMounted} from "vue"
     import {useRouter} from "vue-router"
     import axios from 'axios';
-    let formIsShow = ref(true);
-    let test = ref()
-    let tableData = reactive({});
-    let company = reactive({"name":1,"address":2,"job":3,"salary":4,"detail":5})
-    function handleSelectionChange(newSelection){
-        console.log(newSelection)
-    }
-
-    function edit(row){
-        console.log(row)
-    }
-
-
-    function addCompany(){
-        console.log(company)
-        axios.post("/api/addCompany",{
-            name:company.name,
-            address:company.address,
-            job:company.job,
-            salary:company.salary,
-            detail:company.detail,
-            recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
-        },
-        {
+import { error } from "console";
+    let router = useRouter()
+    let formIsShow = ref(false);
+    let tableData = reactive([]);
+    let company = reactive({})
+    let selectCompany = reactive([])
+    let isDisabled = ref(false)
+    let status = ref()
+    onMounted(()=>{
+        axios.get("/api/getAllCompany",{
             headers: {
             'Authorization': JSON.parse(localStorage.getItem("user")).token
+            },
+            params: {
+                start: 0,
+                end: 20
             }
         }
-        
         ).then(resp => {
-            
+            Object.assign(tableData,resp.data)
         },err => {
 
         })
-        formIsShow.value = false
+    })
+
+    function handleSelectionChange(newSelection){
+        selectCompany.splice(0,selectCompany.length)
+        if(newSelection.length>0){
+            Object.assign(selectCompany,newSelection)
+        }
     }
+
+    function addCompany(){
+        if(status.value == 1){
+            axios.post("/api/addCompany",{
+                name:company.name,
+                address:company.address,
+                job:company.job,
+                salary:company.salary,
+                detail:company.detail,
+                recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
+            },
+            {
+                headers: {
+                'Authorization': JSON.parse(localStorage.getItem("user")).token
+                }
+            }
+            
+            ).then(resp => {
+                
+            },err => {
+
+            })
+        }else if(status.value == 2){
+            axios.post("/api/updateCompany",{
+                id:company.id,
+                name:company.name,
+                address:company.address,
+                job:company.job,
+                salary:company.salary,
+                detail:company.detail,
+                recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
+            },
+            {
+                headers: {
+                'Authorization': JSON.parse(localStorage.getItem("user")).token
+                }
+            }
+            
+            ).then(resp => {
+                
+            },err => {
+
+            })
+        }
+        
+        formIsShow.value = false
+        router.go(0);
+        //location.reload()
+    }
+
+    function deleteCompany(){
+        let deleteId = []
+        for(let i=0;i<selectCompany.length;i++){
+            deleteId.push(selectCompany[i].id)
+        }
+
+         var ajax = new XMLHttpRequest();
+            ajax.open("post","/api/deleteCompany");
+            //ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+            ajax.setRequestHeader("Content-Type","application/json");
+            ajax.setRequestHeader("Authorization",JSON.parse(localStorage.getItem("user")).token);
+            ajax.send(JSON.stringify(deleteId));
+            ajax.onreadystatechange=function(){
+                if(ajax.readyState == 4){
+                    if(ajax.status == 200){
+                        router.go(0);
+                    }
+                }
+            } 
+    }
+
+    function edit(row){
+        formIsShow.value = true
+        Object.assign(company,row)
+        isDisabled.value = false
+        status.value = 2
+    }
+
+    function query(row){
+        formIsShow.value = true
+        Object.assign(company,row)
+        console.log(company)
+        isDisabled.value = true
+    }
+
+
+
 
 
 
     // 测试表格数据
-    tableData = [
-  {
-    date: '2016-05-03',
-    name: '1',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: '2',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: '3',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: '4',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
+//     tableData = [
+//   {
+//     date: '2016-05-03',
+//     name: '1',
+//     address: 'No. 189, Grove St, Los Angeles',
+//   },
+//   {
+//     date: '2016-05-02',
+//     name: '2',
+//     address: 'No. 189, Grove St, Los Angeles',
+//   },
+//   {
+//     date: '2016-05-04',
+//     name: '3',
+//     address: 'No. 189, Grove St, Los Angeles',
+//   },
+//   {
+//     date: '2016-05-01',
+//     name: '4',
+//     address: 'No. 189, Grove St, Los Angeles',
+//   },
+// ]
 
 </script>
 

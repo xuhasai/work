@@ -51,7 +51,6 @@
         let userData = resp.data
             if(userData.status == "200"){
                 localStorage.setItem("user",JSON.stringify(userData))
-                console.log(localStorage.getItem("user"))
                 router.replace({
                     name:"recuritment"
                 })

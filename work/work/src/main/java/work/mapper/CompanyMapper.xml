@@ -5,8 +5,34 @@
 
 <mapper namespace="work.mapper.CompanyMapper">
 
+    <resultMap id="company" type="company">
+        <result column="recruitmentuser_id" property="recruitmentuserId"></result>
+    </resultMap>
+
     <insert id="addCompany" parameterType="company">
         insert into company values(#{id},#{name},#{address},#{job},#{salary},#{detail},#{recruitmentuserId})
     </insert>
+
+    <select id="getAllCompany" parameterType="int" resultMap="company">
+        select * from company limit #{start},#{end}
+    </select>
+
+    <delete id="deleteCompany" parameterType="list">
+        delete from company where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateCompany" parameterType="company">
+        update company set
+        name=#{name},
+        address=#{address},
+        job=#{job},
+        salary=#{salary},
+        detail=#{detail},
+        recruitmentuser_id=#{recruitmentuserId}
+        where id = #{id}
+    </update>
 
 </mapper>

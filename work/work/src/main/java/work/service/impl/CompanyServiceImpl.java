@@ -6,6 +6,8 @@ import work.mapper.CompanyMapper;
 import work.service.CompanyService;
 
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -15,4 +17,20 @@ public class CompanyServiceImpl implements CompanyService {
     public void addCompany(Company company) {
         companyMapper.addCompany(company);
     }
+
+    @Override
+    public List<Company> getAllCompany(int start, int end) {
+        return companyMapper.getAllCompany(start, end);
+    }
+
+    @Override
+    public void deleteCompany(List<String> ids) {
+        companyMapper.deleteCompany(ids);
+    }
+
+    @Override
+    public void updateCompany(Company company) {
+        companyMapper.updateCompany(company);
+    }
+
 }

@@ -14,7 +14,6 @@ const router = createRouter({
             path:"/recuritment",
             component:Recuritment,
             beforeEnter (to, from, next) {
-                console.log("独享")
                 if(localStorage.getItem("user")){
                     let user = JSON.parse(localStorage.getItem("user"))
                     if(user.data){
@@ -39,18 +38,12 @@ const router = createRouter({
     ]
 })
 router.beforeEach((to, from, next) => {
-    console.log("全局",JSON.parse(localStorage.getItem("user")).data)
-    
     if(to.path == "/login"){
-        console.log("全局5",JSON.parse(localStorage.getItem("user")).data)
         next()
     }else{
-        console.log("全局2",JSON.parse(localStorage.getItem("user")).data)
         if(localStorage.getItem("user")){
-            console.log("全局4",localStorage.getItem("user"))
             next()
         }else{
-            console.log("全局3",localStorage.getItem("user"))
             router.replace("/login")
         }
     }
