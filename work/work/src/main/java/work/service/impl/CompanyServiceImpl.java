@@ -19,8 +19,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> getAllCompany(int start, int end) {
-        return companyMapper.getAllCompany(start, end);
+    public List<Company> getAllCompany(int start, int end,String recruitmentuserId) {
+        return companyMapper.getAllCompany(start, end,recruitmentuserId);
     }
 
     @Override

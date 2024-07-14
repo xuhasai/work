@@ -8,6 +8,8 @@ public class RecruitmentUser {
     private String username;
     private String password;
     private String name;
+    private String gender;
+    private int age;
     private String permissions;
 
 

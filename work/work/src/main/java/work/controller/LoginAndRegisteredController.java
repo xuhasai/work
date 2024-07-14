@@ -1,16 +1,15 @@
 package work.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import work.entity.AdministratorUser;
-import work.entity.JobSeekersUser;
+import org.springframework.web.bind.annotation.*;
 import work.entity.ResutSet;
 import work.mapper.AdministratorUserLoginMapper;
-import work.mapper.JobSeekersUserLoginMapper;
-import work.mapper.RecruitmentUserLoginMapper;
+import work.mapper.JobSeekersUserMapper;
+import work.mapper.RecruitmentUserMapper;
 import work.service.AdministratorUserLoginService;
 import work.service.JobSeekersUserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +19,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import work.service.RecruitmentUserLoginService;
 import work.service.UserLoginServiceFactory;
 import work.util.JWTUtil;
@@ -33,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-public class LoginController {
+public class LoginAndRegisteredController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -41,10 +36,10 @@ public class LoginController {
     AdministratorUserLoginMapper administratorUserLoginMapper;
 
     @Autowired
-    JobSeekersUserLoginMapper jobSeekersUserLoginMapper;
+    JobSeekersUserMapper jobSeekersUserMapper;
 
     @Resource
-    RecruitmentUserLoginMapper recruitmentUserLoginMapper;
+    RecruitmentUserMapper recruitmentUserMapper;
 
     @Autowired
     UserLoginServiceFactory userLoginServiceFactory;
@@ -115,10 +110,10 @@ public class LoginController {
                 resutSet.setData(administratorUserLoginMapper.getUserByName(username));
             }else if("jobseekers".equals(loginType)){
                 userDetails = jobLoginService.loadUserByUsername(username,password);
-                resutSet.setData(jobSeekersUserLoginMapper.getUserByName(username));
+                resutSet.setData(jobSeekersUserMapper.getUserByName(username));
             }else if("recruitment".equals(loginType)){
                 userDetails = recruitmentLoginService.loadUserByUsername(username,password);
-                resutSet.setData(recruitmentUserLoginMapper.getUserByName(username));
+                resutSet.setData(recruitmentUserMapper.getUserByName(username));
             }else {
                 resutSet.setMessage("用户名密码错误");
                 resutSet.setStatus(HttpStatus.UNAUTHORIZED+"");
@@ -142,6 +137,31 @@ public class LoginController {
             return resutSet;
             //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
         }
+    }
+    @PostMapping("/registered")
+    @ResponseBody
+    public ResutSet registered(@RequestBody JSONObject userData) {
+        ResutSet resutSet = new ResutSet();
+        try {
+            if("jobseekers".equals(userData.get("permissions"))){
+                jobLoginService.registeredJobUser(userData);
+            }else if("recruitment".equals(userData.get("permissions"))){
+                recruitmentLoginService.registeredRecruitmentUser(userData);
+            }else{
+                resutSet.setMessage("注册失败");
+                resutSet.setStatus("500");
+                return resutSet;
+            }
+            resutSet.setMessage("注册成功");
+            resutSet.setStatus("200");
+            return resutSet;
+        } catch (AuthenticationException e ) {
+            resutSet.setMessage(e.getMessage());
+            resutSet.setStatus("500");
+            return resutSet;
+            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+        }
+
     }
 
     @RequestMapping("/login3")

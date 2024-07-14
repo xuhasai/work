@@ -32,6 +32,7 @@
     import {ref} from "vue"
     import axios from "axios";
     import {useRouter} from "vue-router"
+    import { ElMessage } from 'element-plus'
     let router = useRouter()
     let username = ref("");
     let password = ref("");
@@ -49,11 +50,14 @@
         }
     ).then(resp => {
         let userData = resp.data
+            ElMessage({
+                message: resp.data.message,
+                type: 'success',
+                plain: true,
+            })
             if(userData.status == "200"){
                 localStorage.setItem("user",JSON.stringify(userData))
-                router.replace({
-                    name:"recuritment"
-                })
+                router.replace("/"+resp.data.data.permissions)
             }
         },err => {
 
@@ -61,7 +65,7 @@
     }
 
     function registered(){
-
+        router.push("/registered")
     }
 
 

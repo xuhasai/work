@@ -1,5 +1,6 @@
 package work.config;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
@@ -53,7 +54,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login","/registered").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -87,21 +88,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         Authentication authentication2 = context.getAuthentication();
         response.setContentType("application/json;charset=utf8");
         String authorization = request.getHeader("Authorization");
+        ResutSet resutSet = new ResutSet();
         if(authorization != null && !authorization.isEmpty() && authorization.length()>0){
-            ResutSet resutSet = new ResutSet();
             if(jwtUtil.signOut(authorization)){
                 resutSet.setMessage("退出登录成功");
                 resutSet.setStatus("200");
-                resutSet.setData(null);
-                response.getWriter().print(resutSet);
             }else{
                 resutSet.setMessage("滚");
                 resutSet.setStatus("200");
-                response.getWriter().print(resutSet);
             }
+        }else{
+            resutSet.setMessage("滚");
+            resutSet.setStatus("200");
         }
-
-
+        response.getWriter().print(JSONObject.toJSONString(resutSet));
     }
 
 

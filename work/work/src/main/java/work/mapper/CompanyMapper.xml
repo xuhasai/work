@@ -9,13 +9,17 @@
         <result column="recruitmentuser_id" property="recruitmentuserId"></result>
     </resultMap>
 
+    <select id="getAllCompany"  resultMap="company">
+        select * from company
+        <if test="param3 != null">
+            where recruitmentuser_id = #{param3}
+        </if>
+        limit #{param1},#{param2}
+    </select>
+
     <insert id="addCompany" parameterType="company">
         insert into company values(#{id},#{name},#{address},#{job},#{salary},#{detail},#{recruitmentuserId})
     </insert>
-
-    <select id="getAllCompany" parameterType="int" resultMap="company">
-        select * from company limit #{start},#{end}
-    </select>
 
     <delete id="deleteCompany" parameterType="list">
         delete from company where id in

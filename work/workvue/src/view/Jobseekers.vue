@@ -3,11 +3,7 @@
         <el-container>
             <el-header>
                 <el-row>
-                    <el-col :span="24">
-                        <el-button @click="showForm" type="primary">添加</el-button>
-                        <el-button type="primary" @click="deleteCompany">删除</el-button>
-                        <Logout></Logout>
-                    </el-col>
+                    <Logout></Logout>
                 </el-row>
             </el-header>
             <el-main>
@@ -24,9 +20,6 @@
                             <el-button @click="query(scope.row)" >
                                 查看
                             </el-button>
-                            <el-button @click="edit(scope.row)" >
-                                修改
-                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -41,17 +34,14 @@
                 <div><label>公司地址：<input v-model="company.address" type="text" :disabled="isDisabled"></label></div>
                 <div><label>招聘职位：<input v-model="company.job" type="text" :disabled="isDisabled"></label></div>
                 <div><label>每月薪资：<input v-model="company.salary" type="number" :disabled="isDisabled"></label></div>
-                <div style="vertical-align: top;">
-                    <label><span style="vertical-align: top;">公司简介：</span>
+                <div>
+                    <label>公司简介：
                         <textarea :disabled="isDisabled" v-model="company.detail" name="message" rows="10" cols="15" >
                             
                         </textarea>
                     </label>
                 </div>
-                <div>
-                    <el-button @click="formIsShow = false" type="success">取消</el-button>
-                    <el-button @click="addCompany" type="success" :disabled="isDisabled">确定</el-button>
-                </div>
+                <div><el-button @click="formIsShow = false" type="primary">取消</el-button></div>
                 
                 
                 
@@ -84,11 +74,10 @@
             params: {
                 start: 0,
                 end: 20,
-                recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
+                //recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
             }
         }
         ).then(resp => {
-            console.log(resp)
             Object.assign(tableData,resp.data)
         },err => {
 
@@ -100,13 +89,6 @@
         if(newSelection.length>0){
             Object.assign(selectCompany,newSelection)
         }
-    }
-
-    function showForm(){
-        Object.assign(company, {"id":"","name":"","address":"","job":"","salary":"","detail":""})
-        formIsShow.value = true
-        isDisabled.value = false
-        status.value=1
     }
 
     function addCompany(){
@@ -197,7 +179,7 @@
 
 <style scoped>
 .recruitment{
-    background-color: rgb(73, 126, 126);
+    background-color: aqua;
 }
 input{
     width: 120px;
@@ -230,7 +212,5 @@ textarea {
   resize: none;
   font-size: 35px;
 }
-
-
 
 </style>

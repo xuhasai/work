@@ -22,8 +22,8 @@ public class CompanyController {
     }
 
     @RequestMapping("/getAllCompany")
-    public List<Company> getAllCompany(int start,int end){
-        return companyService.getAllCompany(start,end);
+    public List<Company> getAllCompany(int start,int end,String recruitmentuserId){
+        return companyService.getAllCompany(start,end,recruitmentuserId);
     }
 
 

@@ -1,12 +1,11 @@
 <template>
-    <div class="recruitment">
+    <div class="company">
         <el-container>
             <el-header>
                 <el-row>
                     <el-col :span="24">
                         <el-button @click="showForm" type="primary">添加</el-button>
                         <el-button type="primary" @click="deleteCompany">删除</el-button>
-                        <Logout></Logout>
                     </el-col>
                 </el-row>
             </el-header>
@@ -52,12 +51,6 @@
                     <el-button @click="formIsShow = false" type="success">取消</el-button>
                     <el-button @click="addCompany" type="success" :disabled="isDisabled">确定</el-button>
                 </div>
-                
-                
-                
-                
-                
-                
             </div>
         </div>
     </div>
@@ -68,7 +61,6 @@
     import {ref , reactive , onMounted} from "vue"
     import {useRouter} from "vue-router"
     import axios from 'axios';
-    import Logout from '@/components/Logout.vue';
     let router = useRouter()
     let formIsShow = ref(false);
     let tableData = reactive([]);
@@ -84,7 +76,7 @@
             params: {
                 start: 0,
                 end: 20,
-                recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
+                //recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
             }
         }
         ).then(resp => {
@@ -196,7 +188,7 @@
 </script>
 
 <style scoped>
-.recruitment{
+.company{
     background-color: rgb(73, 126, 126);
 }
 input{
@@ -230,7 +222,6 @@ textarea {
   resize: none;
   font-size: 35px;
 }
-
 
 
 </style>

@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface CompanyMapper {
     void addCompany(Company company);
-    List<Company> getAllCompany(int start,int end);
+    List<Company> getAllCompany(int start,int end,String recruitmentuserId);
     void deleteCompany(List<String> ids);
     void updateCompany(Company company);
 }
