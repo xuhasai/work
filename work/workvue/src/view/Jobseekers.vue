@@ -4,6 +4,16 @@
             <el-header>
                 <el-row>
                     <Logout></Logout>
+                    <label>公司名称：<input v-model="searchCondition.name" type="text" ></label>
+                    <label>公司地址：<input v-model="searchCondition.address" type="text"></label>
+                    <label>招聘职位：<input v-model="searchCondition.job" type="text"></label>
+                    <label>
+                        每月薪资：
+                        <input v-model="searchCondition.salary1" type="number">-------
+                        <input v-model="searchCondition.salary2" type="number">
+                    </label>
+                    <el-button @click="searchCompany" type="primary">搜索</el-button>
+                    <el-button @click="reset" type="primary">重置</el-button>
                 </el-row>
             </el-header>
             <el-main>
@@ -41,13 +51,7 @@
                         </textarea>
                     </label>
                 </div>
-                <div><el-button @click="formIsShow = false" type="primary">取消</el-button></div>
-                
-                
-                
-                
-                
-                
+                <div><el-button @click="formIsShow = false" type="primary">关闭</el-button></div>
             </div>
         </div>
     </div>
@@ -65,23 +69,15 @@
     let company = reactive({})
     let selectCompany = reactive([])
     let isDisabled = ref(false)
-    let status = ref()
-    onMounted(()=>{
-        axios.get("/api/getAllCompany",{
-            headers: {
-            'Authorization': JSON.parse(localStorage.getItem("user")).token
-            },
-            params: {
-                start: 0,
-                end: 20,
-                //recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
-            }
-        }
-        ).then(resp => {
-            Object.assign(tableData,resp.data)
-        },err => {
+    let searchCondition= reactive({})
+    let token = JSON.parse(localStorage.getItem("user")).token
+    let ws = new WebSocket("ws:localhost:8080/socket?token="+token);
 
-        })
+    ws.onopen = ()=>{
+        
+    }
+    onMounted(()=>{
+        getAllCompany()
     })
 
     function handleSelectionChange(newSelection){
@@ -91,88 +87,59 @@
         }
     }
 
-    function addCompany(){
-        if(status.value == 1){
-            axios.post("/api/addCompany",{
-                name:company.name,
-                address:company.address,
-                job:company.job,
-                salary:company.salary,
-                detail:company.detail,
-                recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
-            },
-            {
-                headers: {
-                'Authorization': JSON.parse(localStorage.getItem("user")).token
-                }
-            }
-            
-            ).then(resp => {
-                
-            },err => {
-
-            })
-        }else if(status.value == 2){
-            axios.post("/api/updateCompany",{
-                id:company.id,
-                name:company.name,
-                address:company.address,
-                job:company.job,
-                salary:company.salary,
-                detail:company.detail,
-                recruitmentuserId:JSON.parse(localStorage.getItem("user")).data.id
-            },
-            {
-                headers: {
-                'Authorization': JSON.parse(localStorage.getItem("user")).token
-                }
-            }
-            
-            ).then(resp => {
-                
-            },err => {
-
-            })
-        }
-        
-        formIsShow.value = false
-        router.go(0);
-        //location.reload()
-    }
-
-    function deleteCompany(){
-        let deleteId = []
-        for(let i=0;i<selectCompany.length;i++){
-            deleteId.push(selectCompany[i].id)
-        }
-
-         var ajax = new XMLHttpRequest();
-            ajax.open("post","/api/deleteCompany");
-            //ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-            ajax.setRequestHeader("Content-Type","application/json");
-            ajax.setRequestHeader("Authorization",JSON.parse(localStorage.getItem("user")).token);
-            ajax.send(JSON.stringify(deleteId));
-            ajax.onreadystatechange=function(){
-                if(ajax.readyState == 4){
-                    if(ajax.status == 200){
-                        router.go(0);
-                    }
-                }
-            } 
-    }
-
-    function edit(row){
-        formIsShow.value = true
-        Object.assign(company,row)
-        isDisabled.value = false
-        status.value = 2
-    }
-
     function query(row){
         formIsShow.value = true
         Object.assign(company,row)
         console.log(company)
         isDisabled.value = true
+    }
+
+    function reset(){
+        Object.assign(searchCondition,{"name":"","address":"","job":"","salary1":"","salary2":""})
+        getAllCompany()
+    }
+
+    function getAllCompany(){
+        axios.get("/api/getAllCompany",{
+            headers: {
+            'Authorization': JSON.parse(localStorage.getItem("user")).token
+            },
+            params: {
+                start: 0,
+                end: 20,
+            }
+        }
+        ).then(resp => {
+            Object.assign(tableData,resp.data)
+        },err => {
+
+        })
+    }
+
+    function searchCompany(){
+        axios.post("/api/searchCompany",
+        {
+            name:searchCondition.name,
+            address:searchCondition.address,
+            job:searchCondition.job,
+            salary1:searchCondition.salary1,
+            salary2:searchCondition.salary2,
+            start: 0,
+            end: 20,
+        },
+        {
+            headers: {
+            'Authorization': JSON.parse(localStorage.getItem("user")).token
+            }
+        }
+        ).then(resp => {
+            tableData.splice(0,tableData.length)
+            Object.assign(tableData,resp.data)
+            console.log(tableData)
+            console.log(resp.data)
+        },err => {
+
+        })
     }
 
 </script>

@@ -39,4 +39,27 @@
         where id = #{id}
     </update>
 
+    <select id="searchCompany"  resultMap="company">
+        select * from company
+        <where>
+            <if test="name != null and name != '' ">
+                name like CONCAT('%', #{name}, '%')
+            </if>
+            <if test="address != null and address != '' ">
+                and address like CONCAT('%', #{address}, '%')
+            </if>
+            <if test="job != null and job != '' ">
+                and job like CONCAT('%', #{job}, '%')
+            </if>
+            <if test="salary1 != null and salary1 != '' ">
+                and salary &gt;= #{salary1}
+            </if>
+            <if test="salary2 != null and salary2 != '' ">
+                and salary &lt;= #{salary2}
+            </if>
+        </where>
+        limit #{start},#{end}
+    </select>
+
+
 </mapper>

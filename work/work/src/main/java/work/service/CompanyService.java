@@ -1,9 +1,8 @@
 package work.service;
 
 import work.entity.Company;
-import work.mapper.CompanyMapper;
+import work.entity.SearchCompany;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 public interface CompanyService {
@@ -11,4 +10,5 @@ public interface CompanyService {
     List<Company> getAllCompany(int start, int end,String recruitmentuserId);
     void deleteCompany(List<String> ids);
     void updateCompany(Company company);
+    List<Company> searchCompany(SearchCompany searchCompany);
 }

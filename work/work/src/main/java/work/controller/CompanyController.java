@@ -1,7 +1,9 @@
 package work.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import work.entity.Company;
+import work.entity.SearchCompany;
 import work.service.CompanyService;
 
 import javax.annotation.Resource;
@@ -40,6 +42,12 @@ public class CompanyController {
             companyService.updateCompany(company);
         }
     }
+
+    @RequestMapping("/searchCompany")
+    public List<Company> searchCompany(@RequestBody SearchCompany searchCompany){
+        return companyService.searchCompany(searchCompany);
+    }
+
 
 
 
