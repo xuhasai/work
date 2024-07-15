@@ -11,7 +11,7 @@ public class Company {
     private double salary;
     private String detail;
     private String recruitmentuserId;
-
+    private boolean isApproval = false;
 
 
 }

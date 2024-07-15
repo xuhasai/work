@@ -1,8 +1,10 @@
 package work.service.impl;
 
 import org.springframework.stereotype.Service;
+import work.entity.Approval;
 import work.entity.Company;
 import work.entity.SearchCompany;
+import work.mapper.ApprovalMapper;
 import work.mapper.CompanyMapper;
 import work.service.CompanyService;
 
@@ -12,8 +14,14 @@ import java.util.List;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
+
     @Resource
     private CompanyMapper companyMapper;
+
+    @Resource
+    ApprovalMapper approvalMapper;
+
+
     @Override
     public void addCompany(Company company) {
         companyMapper.addCompany(company);
@@ -43,6 +51,24 @@ public class CompanyServiceImpl implements CompanyService {
             searchCompany.setSalary2(salary1>salary2?salary1:salary2);
         }
         return companyMapper.searchCompany(searchCompany);
+    }
+
+    @Override
+    public List<Company> getAllCompanyByStatus(int start, int end, String jobseekersId) {
+        List<Company> allCompany = companyMapper.getAllCompany(start, end,null);
+        Approval approval = new Approval();
+        approval.setJobseekersId(jobseekersId);
+        List<Approval> approvalList = approvalMapper.getApproval(approval);
+        if(allCompany != null && allCompany.size() > 0 && approvalList != null && approvalList.size() > 0){
+            for(Company company : allCompany){
+                for(Approval approval1 : approvalList){
+                    if(company.getId().equals(approval1.getCompanyId())){
+                        company.setApproval(true);
+                    }
+                }
+            }
+        }
+        return allCompany;
     }
 
 }

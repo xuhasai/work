@@ -1,5 +1,6 @@
 package work.service;
 
+import work.entity.Approval;
 import work.entity.Company;
 import work.entity.SearchCompany;
 
@@ -11,4 +12,5 @@ public interface CompanyService {
     void deleteCompany(List<String> ids);
     void updateCompany(Company company);
     List<Company> searchCompany(SearchCompany searchCompany);
+    List<Company> getAllCompanyByStatus(int start, int end, String jobseekersId);
 }

@@ -30,6 +30,12 @@
                             <el-button @click="query(scope.row)" >
                                 查看
                             </el-button>
+                            <el-button v-if="!scope.row.approval" @click="request(scope.row)" >
+                                申请
+                            </el-button>
+                            <el-button v-if="scope.row.approval" :disabled="scope.row.approval">
+                                已申请
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -70,6 +76,7 @@
     let selectCompany = reactive([])
     let isDisabled = ref(false)
     let searchCondition= reactive({})
+    let approval = reactive({})
     let token = JSON.parse(localStorage.getItem("user")).token
     let ws = new WebSocket("ws:localhost:8080/socket?token="+token);
 
@@ -88,9 +95,9 @@
     }
 
     function query(row){
+        console.log(row)
         formIsShow.value = true
         Object.assign(company,row)
-        console.log(company)
         isDisabled.value = true
     }
 
@@ -98,18 +105,20 @@
         Object.assign(searchCondition,{"name":"","address":"","job":"","salary1":"","salary2":""})
         getAllCompany()
     }
-
+    //ByStatus
     function getAllCompany(){
-        axios.get("/api/getAllCompany",{
+        axios.get("/api/getAllCompanyByStatus",{
             headers: {
             'Authorization': JSON.parse(localStorage.getItem("user")).token
             },
             params: {
                 start: 0,
                 end: 20,
+                jobseekersId:JSON.parse(localStorage.getItem("user")).data.id
             }
         }
         ).then(resp => {
+            console.log(resp.data)
             Object.assign(tableData,resp.data)
         },err => {
 
@@ -140,6 +149,29 @@
         },err => {
 
         })
+    }
+
+    function request(row){
+        Object.assign(approval,{"companyId":"","recruitmentId":"","jobseekersId":"","status":""})
+        console.log(row.recruitmentuserId)
+        axios.post("/api/addApproval",
+        {
+            companyId:row.id,
+            recruitmentId:row.recruitmentuserId,
+            jobseekersId:JSON.parse(localStorage.getItem("user")).data.id,
+            status:"1"
+        },
+        {
+            headers: {
+            'Authorization': JSON.parse(localStorage.getItem("user")).token
+            }
+        }
+        ).then(resp => {
+
+        },err => {
+
+        })
+        router.go(0);
     }
 
 </script>

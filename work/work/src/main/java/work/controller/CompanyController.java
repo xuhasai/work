@@ -49,6 +49,11 @@ public class CompanyController {
     }
 
 
+    @RequestMapping("/getAllCompanyByStatus")
+    public List<Company> getAllCompanyByStatus(int start,int end,String jobseekersId){
+        return companyService.getAllCompanyByStatus(start,end,jobseekersId);
+    }
+
 
 
 

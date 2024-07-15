@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="work.mapper.ApprovalMapper">
+
+    <resultMap id="approval" type="approval">
+        <result column="company_id" property="companyId"></result>
+        <result column="recruitment_id" property="recruitmentId"></result>
+        <result column="jobseekers_id" property="jobseekersId"></result>
+    </resultMap>
+
+
+    <insert id="addApproval" parameterType="approval">
+        insert into approval values(#{id},#{companyId},#{recruitmentId},#{jobseekersId},#{status})
+    </insert>
+
+    <select id="getApproval"  parameterType="approval" resultMap="approval">
+        select * from approval
+        <where>
+            <if test="companyId != null and companyId != '' ">
+                company_id = #{companyId}
+            </if>
+            <if test="recruitmentId != null and recruitmentId != '' ">
+                and recruitment_id = #{recruitmentId}
+            </if>
+            <if test="jobseekersId != null and jobseekersId != '' ">
+                and jobseekers_id = #{jobseekersId}
+            </if>
+        </where>
+    </select>
+
+</mapper>
