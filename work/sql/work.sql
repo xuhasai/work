@@ -3,15 +3,15 @@
 
  Source Server         : 本地
  Source Server Type    : MySQL
- Source Server Version : 80030 (8.0.30)
+ Source Server Version : 80037
  Source Host           : localhost:3306
  Source Schema         : work
 
  Target Server Type    : MySQL
- Target Server Version : 80030 (8.0.30)
+ Target Server Version : 80037
  File Encoding         : 65001
 
- Date: 14/07/2024 15:58:26
+ Date: 16/07/2024 00:07:09
 */
 
 SET NAMES utf8mb4;
@@ -28,12 +28,32 @@ CREATE TABLE `administratoruser`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `permissions` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of administratoruser
 -- ----------------------------
 INSERT INTO `administratoruser` VALUES ('1', 'admin', '$2a$10$p/v27cGbUIPENP1Sw96mEO/xbENtbhM6POrAl63vlGBiNf.BZ.Apq', 'hasai', 'admin');
+
+-- ----------------------------
+-- Table structure for approval
+-- ----------------------------
+DROP TABLE IF EXISTS `approval`;
+CREATE TABLE `approval`  (
+  `id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `company_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `recruitment_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `jobseekers_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of approval
+-- ----------------------------
+INSERT INTO `approval` VALUES ('547a41de-e059-4002-9c42-d7e3ad388898', '46c017c1-790e-40a6-875e-ade4c7878958', '1', '1', '1');
+INSERT INTO `approval` VALUES ('a6a5cd18-21a8-4b28-ae49-df8a257cc6d7', '99cc0e0b-657d-4b04-ba2d-1a9b23b1e762', 'e7747655-ff26-47df-be21-a067d5ac3df7', '1', '1');
+INSERT INTO `approval` VALUES ('c8db0910-9c96-44b8-828b-af9d7d3d5b3a', '1', '1', '1', '1');
 
 -- ----------------------------
 -- Table structure for company
@@ -48,7 +68,7 @@ CREATE TABLE `company`  (
   `detail` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
   `recruitmentuser_id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of company
@@ -70,7 +90,7 @@ CREATE TABLE `jobseekers`  (
   `age` int NULL DEFAULT NULL,
   `permissions` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of jobseekers
@@ -90,7 +110,7 @@ CREATE TABLE `recruitmentuser`  (
   `age` int NULL DEFAULT NULL,
   `permissions` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of recruitmentuser
