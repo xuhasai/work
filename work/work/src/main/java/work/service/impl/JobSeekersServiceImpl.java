@@ -28,4 +28,9 @@ public class JobSeekersServiceImpl implements JobSeekersService {
     public void updateJobSeekers(JobSeekersUser jobSeekersUser) {
         jobSeekersUserMapper.updateJobSeekers(jobSeekersUser);
     }
+
+    @Override
+    public JobSeekersUser getJobseekersById(String id) {
+        return jobSeekersUserMapper.getJobseekersById(id);
+    }
 }

@@ -19,7 +19,10 @@ public class ApprovalController {
         approvalService.addApproval(approval);
     }
 
-
+    @RequestMapping("/updateApproval")
+    public void updateApproval(@RequestBody Approval approval) {
+        approvalService.updateApproval(approval);
+    }
 
 
 }

@@ -31,7 +31,7 @@ public class JWTUtil {
             list2.add(list.get(i)+"");
         }
         Date date = new Date();
-        Date expDate = new Date(date.getTime()+60*60*1000);
+        Date expDate = new Date(date.getTime()+24*60*60*1000);
         String token = JWT.create()
                 //.withClaim("password",user.getPassword())
                 .withClaim("name", user.getUsername())  //配置JWT自定义信息
@@ -39,7 +39,7 @@ public class JWTUtil {
                 .withExpiresAt(expDate)  //设置过期时间
                 .withIssuedAt(date)    //设置创建创建时间
                 .sign(algorithm);   //最终签名
-        stringRedisTemplate.opsForValue().set(token, token,60, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set(token, token,1, TimeUnit.DAYS);
         return token;
     }
 

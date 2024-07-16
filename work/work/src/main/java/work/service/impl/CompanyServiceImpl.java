@@ -9,6 +9,7 @@ import work.mapper.CompanyMapper;
 import work.service.CompanyService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -54,10 +55,8 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> getAllCompanyByStatus(int start, int end, String jobseekersId) {
-        List<Company> allCompany = companyMapper.getAllCompany(start, end,null);
-        Approval approval = new Approval();
-        approval.setJobseekersId(jobseekersId);
+    public List<Company> getAllCompanyByStatus(Approval approval) {
+        List<Company> allCompany = companyMapper.getAllCompany(approval.getStart(), approval.getEnd(),null);
         List<Approval> approvalList = approvalMapper.getApproval(approval);
         if(allCompany != null && allCompany.size() > 0 && approvalList != null && approvalList.size() > 0){
             for(Company company : allCompany){
@@ -70,5 +69,45 @@ public class CompanyServiceImpl implements CompanyService {
         }
         return allCompany;
     }
+
+    @Override
+    public List<Company> getCompanyByApproval(Approval approval) {
+        List<Approval> approvalList = approvalMapper.getApproval(approval);
+        List<String> ids = new ArrayList<>();
+        for (Approval approval1 : approvalList) {
+            ids.add(approval1.getCompanyId());
+        }
+        List<Company> allCompany = companyMapper.getCompanyByIds(approval.getStart(),approval.getEnd(),ids);
+        if(allCompany != null && allCompany.size() > 0 && approvalList != null && approvalList.size() > 0){
+            for(Company company : allCompany){
+                for(Approval approval1 : approvalList){
+                    if(company.getId().equals(approval1.getCompanyId())){
+                        company.setApproval(true);
+                        company.setStatus(approval1.getStatus());
+                    }
+                }
+            }
+        }
+        return allCompany;
+    }
+
+    @Override
+    public List<Company> getCompanyByApprovalAndJobseekers(Approval approval) {
+        List<Approval> approvalList = approvalMapper.getApproval(approval);
+        List<Company> companyList = new ArrayList<>();
+        for(Approval approval1 : approvalList){
+            Company company = companyMapper.getCompanyById(approval1.getCompanyId());
+            if(company != null){
+                company.setJobseekersId(approval1.getJobseekersId());
+                company.setStatus(approval1.getStatus());
+                companyList.add(company);
+            }
+        }
+
+
+
+        return companyList;
+    }
+
 
 }

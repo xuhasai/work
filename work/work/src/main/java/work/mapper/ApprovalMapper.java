@@ -9,4 +9,7 @@ import java.util.List;
 public interface ApprovalMapper {
     void addApproval(Approval approval);
     List<Approval> getApproval(Approval approval);
+
+    void updateApproval(Approval approval);
+
 }

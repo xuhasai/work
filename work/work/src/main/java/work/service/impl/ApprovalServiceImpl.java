@@ -25,4 +25,10 @@ public class ApprovalServiceImpl implements ApprovalService {
             approvalMapper.addApproval(approval);
         }
     }
+
+    @Override
+    public void updateApproval(Approval approval) {
+        approvalMapper.updateApproval(approval);
+    }
+
 }

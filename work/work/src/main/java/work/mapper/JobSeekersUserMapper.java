@@ -17,6 +17,7 @@ public interface JobSeekersUserMapper {
     void deleteJobSeekers(List<String> ids);
     void updateJobSeekers(JobSeekersUser user);
     List<JobSeekersUser> getAllJobSeekers(int start,int end);
-
+    @Select("select * from jobseekers where id = #{id}")
+    JobSeekersUser getJobseekersById(String id);
 
 }

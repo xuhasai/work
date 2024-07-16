@@ -9,4 +9,6 @@ public class Approval {
     private String recruitmentId;
     private String jobseekersId;
     private String status;
+    private int start;
+    private int end;
 }

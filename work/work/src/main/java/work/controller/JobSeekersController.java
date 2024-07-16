@@ -45,4 +45,10 @@ public class JobSeekersController {
             return;
         }
     }
+
+    @RequestMapping("/getJobseekersById")
+    public JobSeekersUser getJobseekersById(String id){
+        return jobSeekersService.getJobseekersById(id);
+    }
+
 }

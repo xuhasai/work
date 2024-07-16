@@ -2,6 +2,7 @@ package work.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.*;
+import work.entity.Approval;
 import work.entity.Company;
 import work.entity.SearchCompany;
 import work.service.CompanyService;
@@ -50,8 +51,19 @@ public class CompanyController {
 
 
     @RequestMapping("/getAllCompanyByStatus")
-    public List<Company> getAllCompanyByStatus(int start,int end,String jobseekersId){
-        return companyService.getAllCompanyByStatus(start,end,jobseekersId);
+    public List<Company> getAllCompanyByStatus(@RequestBody Approval approval){
+        return companyService.getAllCompanyByStatus(approval);
+    }
+
+    @RequestMapping("/getCompanyByApproval")
+    public List<Company> getCompanyByApproval(@RequestBody Approval approval){
+        return companyService.getCompanyByApproval(approval);
+    }
+
+
+    @RequestMapping("/getCompanyByApprovalAndJobseekers")
+    public List<Company> getCompanyByApprovalAndJobseekers(@RequestBody Approval approval){
+        return companyService.getCompanyByApprovalAndJobseekers(approval);
     }
 
 

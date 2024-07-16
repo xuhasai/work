@@ -31,4 +31,12 @@
         </where>
     </select>
 
+
+    <update id="updateApproval" parameterType="approval">
+        update approval set
+        status=#{status}
+        where company_id = #{companyId}
+        and recruitment_id = #{recruitmentId}
+        and jobseekers_id = #{jobseekersId}
+    </update>
 </mapper>

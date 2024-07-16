@@ -12,6 +12,7 @@ public class Company {
     private String detail;
     private String recruitmentuserId;
     private boolean isApproval = false;
-
+    private String status;
+    private String jobseekersId;
 
 }

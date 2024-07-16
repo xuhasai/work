@@ -8,6 +8,10 @@ import Admin from "@/view/Admin.vue";
 import ManageRecruitment from "@/view/ManageRecruitment.vue";
 import ManageJobseekers from "@/view/ManageJobseekers.vue";
 import ManageCompany from "@/view/ManageCompany.vue";
+import JobseekersApproval from "@/view/JobseekersApproval.vue"
+import JobseekersJob from "@/view/JobseekersJob.vue"
+import RecruitmentJob from "@/view/RecruitmentJob.vue"
+import RecruitmentApproval from "@/view/RecruitmentApproval.vue"
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes:[
@@ -58,6 +62,17 @@ const router = createRouter({
             name:"recruitment",
             path:"/recruitment",
             component:Recuritment,
+            children:[
+                {
+                    path:"recruitmentJob",
+                    component:RecruitmentJob
+                },
+                {
+                    path:"recruitmentApproval",
+                    component:RecruitmentApproval
+                }
+                
+            ],
             beforeEnter (to, from, next) {
                 if(localStorage.getItem("user")){
                     let user = JSON.parse(localStorage.getItem("user"))
@@ -80,6 +95,17 @@ const router = createRouter({
             name:"jobseekers",
             path:"/jobseekers",
             component:Jobseekers,
+            children:[
+                {
+                    path:"jobseekersJob",
+                    component:JobseekersJob
+                },
+                {
+                    path:"jobseekersApproval",
+                    component:JobseekersApproval
+                }
+                
+            ],
             beforeEnter (to, from, next) {
                 if(localStorage.getItem("user")){
                     let user = JSON.parse(localStorage.getItem("user"))

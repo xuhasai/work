@@ -8,4 +8,5 @@ public interface JobSeekersService {
     List<JobSeekersUser> getAllJobSeekers(int start, int end);
     void deleteJobSeekers(List<String> ids);
     void updateJobSeekers(JobSeekersUser jobSeekersUser);
+    JobSeekersUser getJobseekersById(String id);
 }

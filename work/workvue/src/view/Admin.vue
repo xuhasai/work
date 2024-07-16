@@ -6,7 +6,7 @@
                     active-text-color="#ffd04b"
                     background-color="#545c64"
                     class="el-menu-vertical-demo"
-                    default-active="1-1"
+                    default-active="/admin/manageRecruitment"
                     text-color="#fff"
                     router
                     @open="handleOpen"
@@ -30,7 +30,6 @@
             <el-container>
                     <Logout></Logout>
                 <el-main><RouterView></RouterView></el-main>
-
             </el-container>
         </el-container>
     </div>
@@ -38,8 +37,11 @@
 
 <script setup lang="ts">
 import Logout from '@/components/Logout.vue';
+import {useRouter} from "vue-router"
+let router = useRouter()
 function handleOpen(key, keyPath){
   console.log(key, keyPath)
+  router.replace("/admin/manageRecruitment")
 }
 function handleClose(key, keyPath){
   console.log(key, keyPath)

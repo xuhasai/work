@@ -14,4 +14,7 @@ public interface CompanyMapper {
     void deleteCompany(List<String> ids);
     void updateCompany(Company company);
     List<Company> searchCompany(SearchCompany searchCompany);
+    List<Company> getCompanyByIds(int start,int end,List<String> ids);
+    Company getCompanyById(String id);
+
 }

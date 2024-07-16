@@ -12,5 +12,7 @@ public interface CompanyService {
     void deleteCompany(List<String> ids);
     void updateCompany(Company company);
     List<Company> searchCompany(SearchCompany searchCompany);
-    List<Company> getAllCompanyByStatus(int start, int end, String jobseekersId);
+    List<Company> getAllCompanyByStatus(Approval approval);
+    List<Company> getCompanyByApproval(Approval approval);
+    List<Company> getCompanyByApprovalAndJobseekers(Approval approval);
 }

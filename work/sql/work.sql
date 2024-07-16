@@ -11,7 +11,7 @@
  Target Server Version : 80037
  File Encoding         : 65001
 
- Date: 16/07/2024 00:07:09
+ Date: 16/07/2024 23:47:43
 */
 
 SET NAMES utf8mb4;
@@ -51,9 +51,8 @@ CREATE TABLE `approval`  (
 -- ----------------------------
 -- Records of approval
 -- ----------------------------
-INSERT INTO `approval` VALUES ('547a41de-e059-4002-9c42-d7e3ad388898', '46c017c1-790e-40a6-875e-ade4c7878958', '1', '1', '1');
-INSERT INTO `approval` VALUES ('a6a5cd18-21a8-4b28-ae49-df8a257cc6d7', '99cc0e0b-657d-4b04-ba2d-1a9b23b1e762', 'e7747655-ff26-47df-be21-a067d5ac3df7', '1', '1');
-INSERT INTO `approval` VALUES ('c8db0910-9c96-44b8-828b-af9d7d3d5b3a', '1', '1', '1', '1');
+INSERT INTO `approval` VALUES ('e6d4063c-4580-4c73-8225-a6a56b0ba011', '5b907d5d-c635-4328-92a2-1ebdc8554350', 'c7da20e3-6522-468a-9527-809182db9b83', '9238f294-6410-413d-9974-3691bbf9fadc', '2');
+INSERT INTO `approval` VALUES ('f3b38997-7722-4d31-ac8f-eae200cee1ff', 'afaab042-bd7e-4f48-a79c-17e32a20381e', 'c7da20e3-6522-468a-9527-809182db9b83', '9238f294-6410-413d-9974-3691bbf9fadc', '3');
 
 -- ----------------------------
 -- Table structure for company
@@ -73,9 +72,9 @@ CREATE TABLE `company`  (
 -- ----------------------------
 -- Records of company
 -- ----------------------------
-INSERT INTO `company` VALUES ('1', '1', '1', '1', 1.00, '213333333333333333333333333333333211111111111', '1');
-INSERT INTO `company` VALUES ('46c017c1-790e-40a6-875e-ade4c7878958', '111', '222', '333', 4444.00, '55555', '1');
-INSERT INTO `company` VALUES ('99cc0e0b-657d-4b04-ba2d-1a9b23b1e762', 'aaa', 'bbb', 'ccc', 800.00, 'asdasdasdsadsa', 'e7747655-ff26-47df-be21-a067d5ac3df7');
+INSERT INTO `company` VALUES ('56094e5a-9758-4791-8403-1ad0401c3776', '4444', '4444', '4444', 4444.00, '4444444444444444', '1');
+INSERT INTO `company` VALUES ('5b907d5d-c635-4328-92a2-1ebdc8554350', '2222', '2222', '2222', 2222.00, '222222222222222222222', 'c7da20e3-6522-468a-9527-809182db9b83');
+INSERT INTO `company` VALUES ('afaab042-bd7e-4f48-a79c-17e32a20381e', '3333', '3333', '3333', 3333.00, '33333333333333333', '1');
 
 -- ----------------------------
 -- Table structure for jobseekers
@@ -95,7 +94,7 @@ CREATE TABLE `jobseekers`  (
 -- ----------------------------
 -- Records of jobseekers
 -- ----------------------------
-INSERT INTO `jobseekers` VALUES ('1', 'user', '$2a$10$p/v27cGbUIPENP1Sw96mEO/xbENtbhM6POrAl63vlGBiNf.BZ.Apq', NULL, '女', 0, 'jobseekers');
+INSERT INTO `jobseekers` VALUES ('9238f294-6410-413d-9974-3691bbf9fadc', 'user', '$2a$10$ah5ZuKuYV3YnQy1hmFFDF.vTTPiKtUNNn1STZwX39k8sfvVIcqRlq', '1111', '男', 11, 'jobseekers');
 
 -- ----------------------------
 -- Table structure for recruitmentuser
@@ -115,7 +114,6 @@ CREATE TABLE `recruitmentuser`  (
 -- ----------------------------
 -- Records of recruitmentuser
 -- ----------------------------
-INSERT INTO `recruitmentuser` VALUES ('1', 'user', '$2a$10$p/v27cGbUIPENP1Sw96mEO/xbENtbhM6POrAl63vlGBiNf.BZ.Apq', 'sss', '男', 0, 'recruitment');
-INSERT INTO `recruitmentuser` VALUES ('e7747655-ff26-47df-be21-a067d5ac3df7', '666', '$2a$10$/.isJ6zPTmnOYspFw3TP/eI.AvtJcYKXCn4rt7GucOr5AGH2/YblC', '哈赛 徐', '男', 16, 'recruitment');
+INSERT INTO `recruitmentuser` VALUES ('c7da20e3-6522-468a-9527-809182db9b83', 'user', '$2a$10$JfUvpShao7gHrXyc2RREP.Tr1eajpc53ercIhZW7TdQqIFg47cjvi', '11111', '男', 11, 'recruitment');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -62,4 +62,18 @@
     </select>
 
 
+    <select id="getCompanyByIds" parameterType="list" resultMap="company">
+        select * from company where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        limit #{start},#{end}
+    </select>
+
+    <select id="getCompanyById" parameterType="String" resultMap="company">
+        select * from company where id = #{id}
+    </select>
+
+
+
 </mapper>
